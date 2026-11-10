@@ -1,0 +1,32 @@
+# 第 3 階段：變數與 Jinja2 模板
+# 執行：ansible-playbook playbooks/03-template.yml
+#
+# 變數從哪來？（Ansible 會自動載入，不用在 playbook 裡寫）
+#   group_vars/all.yml   → 所有主機
+#   group_vars/web.yml   → web 群組
+#   host_vars/web2.yml   → 只有 web2
+#   facts                → Ansible 自動蒐集的主機資訊（IP、OS、記憶體……）
+# 同一個變數出現在多個地方時：host_vars > group_vars/web > group_vars/all
+
+- name: 用模板產生每台主機專屬的首頁
+  hosts: web
+  become: true
+
+  tasks:
+    - name: 確保 nginx 已安裝
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    # template 和 copy 很像，差別在於它會先把 .j2 檔裡的變數填好，再傳到主機上
+    # src 會自動到 playbook 旁邊的 templates/ 資料夾找
+    - name: 用模板產生首頁
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+        mode: "0644"
+
+    - name: 確保 nginx 正在執行
+      ansible.builtin.service:
+        name: nginx
+        state: started

@@ -1,0 +1,10 @@
+# group_vars/web.yml：只套用到 [web] 群組（web1、web2）的變數
+page_color: "#2563eb"   # 藍色
+is_primary: false
+
+# 變數也可以是清單，模板裡用 for 迴圈跑
+features:
+  - 變數（group_vars / host_vars）
+  - Jinja2 模板
+  - 迴圈與條件判斷
+  - 用 --check --diff 預覽變更

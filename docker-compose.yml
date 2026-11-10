@@ -1,0 +1,28 @@
+# 模擬 3 台伺服器：web1、web2（網站）、db1（資料庫）
+# 每台對外開一個 SSH port 給 Ansible 連，web 另外開 80 給瀏覽器看結果
+services:
+  web1:
+    build: ./targets
+    hostname: web1
+    ports:
+      - "2221:22"
+      - "8081:80"
+    volumes:
+      - ./keys/authorized_keys:/tmp/authorized_keys:ro
+
+  web2:
+    build: ./targets
+    hostname: web2
+    ports:
+      - "2222:22"
+      - "8082:80"
+    volumes:
+      - ./keys/authorized_keys:/tmp/authorized_keys:ro
+
+  db1:
+    build: ./targets
+    hostname: db1
+    ports:
+      - "2223:22"
+    volumes:
+      - ./keys/authorized_keys:/tmp/authorized_keys:ro

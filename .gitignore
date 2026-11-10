@@ -1,0 +1,2 @@
+# 由 setup.sh 從 ~/.ssh/ansible_lab.pub 自動產生，每台電腦都不同，不需要上傳
+keys/

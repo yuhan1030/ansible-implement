@@ -1,0 +1,3 @@
+# group_vars/all.yml：套用到「所有主機」的變數
+# 檔名對應 inventory 的群組名稱，all 是內建群組（包含每一台）
+site_title: Ansible 練習站

@@ -1,0 +1,14 @@
+# 第 1 階段：確認 Ansible 連得到所有主機，並蒐集一些基本資訊
+# 執行：ansible-playbook playbooks/01-ping.yml
+
+- name: 測試連線
+  hosts: all            # 對 inventory 裡的所有主機執行
+  gather_facts: true    # 先蒐集主機資訊（OS、IP、記憶體……），存成變數 ansible_facts
+
+  tasks:
+    - name: Ping（不是 ICMP，而是確認 SSH + Python 都正常）
+      ansible.builtin.ping:
+
+    - name: 印出每台主機的作業系統
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} 跑的是 {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}"

@@ -1,0 +1,6 @@
+# host_vars/web1.yml：只套用到 web1 這一台
+# host_vars 的優先順序比 group_vars 高，所以這裡會「蓋掉」group_vars/web.yml 的 is_primary
+is_primary: true
+
+# 第 11 步實驗：蓋掉 group_vars/all.yml 的 site_title（只影響 web1）
+site_title: 我的站

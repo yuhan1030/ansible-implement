@@ -1,0 +1,29 @@
+# 第 2 階段：在 web 群組安裝 nginx 並放上首頁
+# 執行：ansible-playbook playbooks/02-install-nginx.yml
+# 重點：再執行一次，會發現所有 task 都是 ok（沒有 changed），這就是「冪等性」
+
+- name: 部署 nginx 網站
+  hosts: web            # 只對 [web] 群組執行，db1 不受影響
+  become: true          # 用 sudo 執行（裝套件需要 root）
+
+  tasks:
+    - name: 安裝 nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present          # 「確保已安裝」，不是「去安裝」，已經裝了就不動
+        update_cache: true
+        cache_valid_time: 3600  # 一小時內不重複 apt update
+
+    - name: 放置首頁
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+          <meta charset="utf-8">
+          <h1>Hello from {{ inventory_hostname }}</h1>
+          <p>這個頁面是 Ansible 部署的</p>
+        mode: "0644"
+
+    - name: 確保 nginx 正在執行
+      ansible.builtin.service:
+        name: nginx
+        state: started

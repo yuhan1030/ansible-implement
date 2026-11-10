@@ -1,0 +1,42 @@
+{# 這是 Jinja2 註解，不會出現在產生的 HTML 裡 #}
+{# 語法：{{ 變數 }} 印出值；{% 指令 %} 做迴圈、判斷 #}
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>{{ site_title }}</title>
+  <style>
+    body { font-family: sans-serif; margin: 40px; }
+    h1 { color: {{ page_color }}; }
+  </style>
+</head>
+<body>
+  <h1>{{ site_title }}：{{ inventory_hostname }}</h1>
+
+  {# if 判斷：is_primary 來自 group_vars / host_vars #}
+  {% if is_primary %}
+  <p>⭐ 我是主要節點</p>
+  {% else %}
+  <p>我是備援節點</p>
+  {% endif %}
+
+  <h2>主機資訊（來自 facts，Ansible 自動蒐集）</h2>
+  <ul>
+    <li>IP：{{ ansible_facts['default_ipv4']['address'] | default('未知') }}</li>
+    <li>系統：{{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}</li>
+    <li>記憶體：{{ ansible_facts['memtotal_mb'] }} MB</li>
+  </ul>
+
+  <h2>這個階段學到的東西</h2>
+  <ul>
+  {% for item in features %}
+    <li>{{ item }}</li>
+  {% endfor %}
+  </ul>
+
+  {# 第 12 步：過濾器（|）會把左邊的值加工後再輸出 #}
+  {#   upper  → 轉成大寫（中文不受影響，英文才看得出差別） #}
+  {#   length → 算清單有幾項 #}
+  <p>{{ site_title | upper }}，共 {{ features | length }} 項</p>
+</body>
+</html>

@@ -1,0 +1,2 @@
+# host_vars/web2.yml：只套用到 web2 這一台
+page_color: "#16a34a"   # 綠色，蓋掉 group_vars/web.yml 的藍色
